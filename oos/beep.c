@@ -1,7 +1,6 @@
 #include "system.h" 
 #include "stdint.h" 
 //Play sound using built in speaker
-//proba da li radiiii
  static void play_sound(uint32_t nFrequence) {
  	uint32_t Div;
  	uint8_t tmp;
