@@ -1,6 +1,6 @@
 #include "system.h" 
 #include "stdint.h" 
-//Play sound using built in speakerfwsefgwergwefwefwsefswefwefwefwefwef
+//Play sound using built in speaker
  static void play_sound(uint32_t nFrequence) {
  	uint32_t Div;
  	uint8_t tmp;
@@ -26,9 +26,9 @@
  }
  
  //Make a beep
- void beep(uint32_t nFrequence ) {
+ void beep(uint32_t nFrequence,int time ) {
  	 play_sound(nFrequence);
- 	 timer_wait(1);//duzina trajanja note
+ 	 timer_wait(time);//duzina trajanja note
  	 nosound();
           //set_PIT_2(old_frequency);
  }

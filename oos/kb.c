@@ -72,7 +72,102 @@ void keyboard_handler(struct regs *r)
         *  to the above layout to correspond to 'shift' being
         *  held. If shift is held using the larger lookup table,
         *  you would add 128 to the scancode when you look for it */
-        putch(kbdus[scancode]);
+
+      
+
+        if(kbdus[scancode]=='2')
+        play_music();
+
+        if(kbdus[scancode]=='1')
+        {  
+          cls();
+           puts("If you want to leave, press 0.\n");
+          puts("Now you can play:\n");
+         
+        }
+        if(kbdus[scancode]=='a')
+        {
+           puts("c ");
+          beep(261,0.2);
+        }
+        if(kbdus[scancode]=='w')
+        {
+         puts("c-up,d-down ");
+         beep(277,0.2);
+        }
+         if(kbdus[scancode]=='s')
+        {
+          puts("d ");
+          beep(293,0.2);
+        }
+         if(kbdus[scancode]=='e')
+        {
+          puts("d-up,e-down ");
+          beep(311,0.2);
+
+        }
+        if(kbdus[scancode]=='d')
+        {
+          puts("e ");
+          beep(329,0.2);
+        }
+        if(kbdus[scancode]=='f')
+        {
+          puts("f ");
+          beep(349,0.2);
+         
+        }
+        if(kbdus[scancode]=='t')
+        {
+          puts("f-up,g-down ");
+          beep(369,0.2);
+         
+        }if(kbdus[scancode]=='g')
+        {
+          puts("g ");
+          beep(391,0.2);
+         
+        }
+        if(kbdus[scancode]=='y')
+        {
+          puts("g-up,a-down ");
+          beep(415,0.2);
+         
+        }
+        if(kbdus[scancode]=='h')
+        {
+          puts("a ");
+          beep(440,0.2);
+         
+        }
+        if(kbdus[scancode]=='u')
+        {
+         puts("a-up,b-down ");
+          beep(466,0.2);
+         
+        }
+        if(kbdus[scancode]=='j')
+        {
+          puts("b ");
+          beep(493,0.2);
+         
+        }
+        if(kbdus[scancode]=='k')
+        {
+          puts("c ");
+          beep(523,0.2);
+         
+        }
+        if(kbdus[scancode]=='0')
+        {
+          meni();
+         
+        }
+    //putch(kbdus[scancode]);
+        
+
+
+        
     }
 }
 

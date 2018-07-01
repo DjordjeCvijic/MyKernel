@@ -35,10 +35,11 @@ void timer_install()
 *  been reached */
 void timer_wait(int ticks)
 {
-    unsigned long eticks;
+   // unsigned long eticks;
 
-    eticks = timer_ticks + ticks*18;
-    while(timer_ticks < eticks) {
-	__asm__ __volatile__("hlt");
-}
+    //eticks = timer_ticks + ticks*18;
+    //while(timer_ticks != eticks);
+	//__asm__ __volatile__("hlt");
+    volatile int i;
+    for(i=0;i<ticks*500000000;i=i+1);
 }

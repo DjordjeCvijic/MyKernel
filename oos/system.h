@@ -19,6 +19,7 @@ extern unsigned short *memsetw(unsigned short *dest, unsigned short val, int cou
 extern int strlen(const char *str);
 extern unsigned char inportb (unsigned short _port);
 extern void outportb (unsigned short _port, unsigned char _data);
+extern void play_music();
 
 /* CONSOLE.C */
 extern void init_video();
@@ -52,7 +53,7 @@ extern void timer_wait(int ticks);
 extern void keyboard_install();
 
 /*BEEP.C*/
-extern void beep(uint32_t nFrequence);
+extern void beep(uint32_t nFrequence,int time);
 
 
 

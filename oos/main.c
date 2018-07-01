@@ -91,38 +91,56 @@ int return_freq(char *a,struct notes n)
 {
     int i=0;
     while(strcmp(a,n.names[i]) && i<15) i++;
-    if(i<15) return n.frequence[i];
-    return 0;
+     return n.frequence[i];
+    
 
 }
-void main()
-{   
-    struct notes n={{{"c"},{"c-up,d-down"},{"d"},{"d-up,e-down"},{"e"},{"f"},{"f-up,g-down"},{"g"},{"g-up,a-down"},{"a"},{"a-up,b-down"},{"b"},{"c1"}},
-                    {261,277,293,311,329,349,369,391,415,440,466,493,523}};
-
-    struct melody m={{{"e"},{"a"},{"c"},{"e"},{"g"},{"a"},{"d"},{"g"},{"c"},{"d"},{"e"},{"f"},{"c"},{"g"},{"e"},{"a"},{"c1"},{"e"},{"d"},{"a"}},
-                    {1,1,2,1,1,2,1,1,1,0.5,4,2,2,2,0.5,1,1,1,0.25,0.25 }};
-    m.lenght=20;
-	gdt_install();
+void install()
+{
+    gdt_install();
 	idt_install();
 	isrs_install();
 	irq_install();
     keyboard_install();
     init_video();
 	timer_install();
-	__asm__ __volatile__ ("sti"); /* dozvoljava da se interapt moze desiti */
+    __asm__ __volatile__ ("sti"); /* dozvoljava da se interapt moze desiti */
+}
+void meni()
+{
+    cls();
+    puts("Wellcome\n\n");
+    puts("If you want to play, press 1.\n");
+    puts("If you want to hear the music, press 2.\n");
+}
+
+void play_music()
+{
+    struct notes n={{{"c"},{"c-up,d-down"},{"d"},{"d-up,e-down"},{"e"},{"f"},{"f-up,g-down"},{"g"},{"g-up,a-down"},{"a"},{"a-up,b-down"},{"b"},{"c1"}},
+                    {261,277,293,311,329,349,369,391,415,440,466,493,523}};
+    struct melody m={{{"e"},{"a"},{"d-up,e-down"},{"e"},{"g"},{"a"},{"d"},{"g"},{"g-up,a-down"},{"d"},{"e"},{"f"},{"c"},{"f-up,g-down"},},
+                    {3,2,1,1,2,1,2,2,1,1,2,1,1,2, }};
+    m.lenght=14;
+	
+	cls();
    int i;
     for(i=0;i<m.lenght;i++)
     {
-        timer_wait(0.2);//pauza izmedju svake note
-        beep(return_freq(m.m_notes[i],n));
-
+        puts("  ");
+        puts(m.m_notes[i]);
+        beep(return_freq(m.m_notes[i],n),m.time[i]);
+        
     }
-    
-	
-	/*('a');
-	timer_wait(18*4);
-      	puts(" kraaalj\n");
-	putch('t');*/
+        puts("\nSong is over.\n");
+        timer_wait(4);
+     cls();
+    meni();
+}
+
+void main()
+{   
+    install();
+  
+   meni();
     for (;;);
 }
