@@ -1,16 +1,13 @@
  #ifndef __SYSTEM_H
 #define __SYSTEM_H
 #include "stdint.h"
-/* This defines what the stack looks like after an ISR was running */
 struct regs
 {
-    unsigned int gs, fs, es, ds;      /* pushed the segs last */
-    unsigned int edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* pushed by 'pusha' */
-    unsigned int int_no, err_code;    /* our 'push byte #' and ecodes do this */
-    unsigned int eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
+    unsigned int gs, fs, es, ds;      
+    unsigned int edi, esi, ebp, esp, ebx, edx, ecx, eax;  
+    unsigned int int_no, err_code;    
+    unsigned int eip, cs, eflags, useresp, ss;   
 };
-
-
 
 /* MAIN.C */
 extern unsigned char *memcpy(unsigned char *dest, const unsigned char *src, int count);
@@ -43,8 +40,6 @@ extern void irq_install();
 extern void irq_install_handler(int irq, void (*handler)(struct regs *r));
 extern void irq_uninstall_handler(int irq);
 
-
-
 /* TIMER.C */
 extern void timer_install();
 extern void timer_wait(int ticks);
@@ -54,12 +49,7 @@ extern void keyboard_install();
 
 /*BEEP.C*/
 extern void beep(uint32_t nFrequence,int time);
-
-
-
 extern void settextcolor(unsigned char forecolor, unsigned char backcolor);
-
-
 
 #endif
 	

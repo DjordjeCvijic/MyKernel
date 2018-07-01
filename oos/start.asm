@@ -1,17 +1,11 @@
-; This is the kernel's entry point. We could either call main here,
-; or we can use this to setup the stack or other nice stuff, like
-; perhaps setting up the GDT and segments. Please note that interrupts
-; are disabled at this point: More on interrupts later!
 [BITS 32]
 global start
 start:
-    mov esp, _sys_stack     ; This points the stack to our new stack area
+    mov esp, _sys_stack     
     jmp stublet
 
-; This part MUST be 4byte aligned, so we solve that issue using 'ALIGN 4'
 ALIGN 4
 mboot:
-    ; Multiboot macros to make a few lines later more readable
     MULTIBOOT_PAGE_ALIGN	equ 1<<0
     MULTIBOOT_MEMORY_INFO	equ 1<<1
     MULTIBOOT_AOUT_KLUDGE	equ 1<<16
@@ -20,58 +14,41 @@ mboot:
     MULTIBOOT_CHECKSUM	equ -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
     EXTERN code, bss, end
 
-    ; This is the GRUB Multiboot header. A boot signature
     dd MULTIBOOT_HEADER_MAGIC
     dd MULTIBOOT_HEADER_FLAGS
     dd MULTIBOOT_CHECKSUM
-    
-    ; AOUT kludge - must be physical addresses. Make a note of these:
-    ; The linker script fills in the data for these ones!
     dd mboot
     dd code
     dd bss
     dd end
     dd start
 
-; This is an endless loop here. Make a note of this: Later on, we
-; will insert an 'extern _main', followed by 'call _main', right
-; before the 'jmp $'.
 stublet:
 extern main 
 call main
 jmp $
 
 
-; Shortly we will add code for loading the GDT right here!
 
-; This will set up our new segment registers. We need to do
-; something special in order to set CS. We do what is called a
-; far jump. A jump that includes a segment as well as an offset.
-; This is declared in C as 'extern void gdt_flush();'
-global gdt_flush     ; Allows the C code to link to this
-extern gp            ; Says that '_gp' is in another file
+global gdt_flush     
+extern gp            
 gdt_flush:
-    lgdt [gp]        ; Load the GDT with our '_gp' which is a special pointer
-    mov ax, 0x10      ; 0x10 is the offset in the GDT to our data segment
+    lgdt [gp]        
+    mov ax, 0x10      
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
     mov ss, ax
-    jmp 0x08:flush2   ; 0x08 is the offset to our code segment: Far jump!
+    jmp 0x08:flush2   
 flush2:
-    ret               ; Returns back to the C code!
+    ret               
 
-; Loads the IDT defined in '_idtp' into the processor.
-; This is declared in C as 'extern void idt_load();'
 global idt_load
 extern idtp
 idt_load:
     lidt [idtp]
     ret
-
-; In just a few pages in this tutorial, we will add our Interrupt
-; Service Routines (ISRs) right here!
 
 global isr0
 global isr1
@@ -162,9 +139,7 @@ isr7:
 ;  8: Double Fault Exception (With Error Code!)
 isr8:
     cli
-    push byte 8        ; Note that we DON'T push a value on the stack in this one!
-                   ; It pushes one already! Use this type of stub for exceptions
-                   ; that pop error codes!
+    push byte 8        
     jmp isr_common_stub
 
 isr9:
@@ -299,44 +274,32 @@ isr31:
     push byte 31
     jmp isr_common_stub
 
-; We call a C function in here. We need to let the assembler know
-; that '_fault_handler' exists in another file
 extern fault_handler
 
-; This is our common ISR stub. It saves the processor state, sets
-; up for kernel mode segments, calls the C-level fault handler,
-; and finally restores the stack frame.
 isr_common_stub:
     pusha
     push ds
     push es
     push fs
     push gs
-    mov ax, 0x10   ; Load the Kernel Data Segment descriptor!
+    mov ax, 0x10   
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
-    mov eax, esp   ; Push us the stack
+    mov eax, esp   
     push eax
     mov eax, fault_handler
-    call eax       ; A special call, preserves the 'eip' register
+    call eax       
     pop eax
     pop gs
     pop fs
     pop es
     pop ds
     popa
-    add esp, 8     ; Cleans up the pushed error code and pushed ISR number
-    iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP!
+    add esp, 8     
+    iret           
 		
-
-
-
-
-
-
-
 global irq0
 global irq1
 global irq2
@@ -468,8 +431,6 @@ irq15:
 
 extern irq_handler
 
-; This is a stub that we have created for IRQ based ISRs. This calls
-; '_irq_handler' in our C code. We need to create this in an 'irq.c'
 
 irq_common_stub:
     pusha
@@ -499,11 +460,7 @@ irq_common_stub:
     iret
 
 
-; Here is the definition of our BSS section. Right now, we'll use
-; it just to store the stack. Remember that a stack actually grows
-; downwards, so we declare the size of the data before declaring
-; the identifier '_sys_stack'
 SECTION .bss
-    resb 8192               ; This reserves 8KBytes of memory here
+    resb 8192               
 _sys_stack:
 

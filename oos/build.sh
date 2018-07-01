@@ -15,6 +15,6 @@ i686-elf-gcc -I./include -c timer.c -o timer.o -std=gnu99 -ffreestanding -O2 -Wa
 i686-elf-gcc -I./include -c kb.c -o kb.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 i686-elf-gcc -I./include -c beep.c -o beep.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
-i686-elf-gcc -T link.ld -o kernel.bin -ffreestanding -O2 -nostdlib start.o main.o scrn.o gdt.o isrs.o idt.o irq.o timer.o kb.o beep.o -lgcc
+i686-elf-gcc -T link.ld -o MyKernel.bin -ffreestanding -O2 -nostdlib start.o main.o scrn.o gdt.o isrs.o idt.o irq.o timer.o kb.o beep.o -lgcc
 
 

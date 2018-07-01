@@ -1,4 +1,4 @@
 mkdir -p isodir/boot/grub
-cp kernel.bin isodir/boot/kernel.bin
+cp MyKernel.bin isodir/boot/MyKernel.bin
 cp grub.cfg isodir/boot/grub/grub.cfg
-grub-mkrescue -o kernel.iso isodir
+grub-mkrescue -o MyKernel.iso isodir
